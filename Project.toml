@@ -1,0 +1,13 @@
+name = "LearningAutomata"
+uuid = "e3ef4b07-774d-4aef-af6b-c65484cd10e4"
+authors = ["Henri Kauhanen"]
+version = "1.0.0-DEV"
+
+[compat]
+julia = "1.6.7"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
