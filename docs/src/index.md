@@ -15,7 +15,6 @@ LRPLearner(dim::Int, gamma::Float64)
 ## Functions
 
 ```@docs
-act
 reward!
 punish!
 interact!
