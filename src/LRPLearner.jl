@@ -5,13 +5,15 @@
                c::Vector{Float64},
                W::Vector{Float64},
                R::Vector{Matrix{Float64}}, 
-               P::Vector{Matrix{Float64}}) <: AbstractLinearLearner
+               P::Vector{Matrix{Float64}},
+               A::Matrix{Float64}) <: AbstractLinearLearner
 
 A linear reward-penalty learner.
 
 A general linear reward-penalty learner with `n` actions, learning rates `a`
 for rewards, learning rates `b` for punishments, action costs `c`, action probability
-vector `W`, and vectors of reward and penalty operators `R` and `P`.
+vector `W`, vectors of reward and penalty operators `R` and `P`, and
+advantage matrix `A`.
 
 # References
 
@@ -25,11 +27,12 @@ mutable struct LRPLearner <: AbstractLinearLearner
     W::Vector{Float64}
     R::Vector{Matrix{Float64}}
     P::Vector{Matrix{Float64}}
+    A::Matrix{Float64}
 end
 
 
 # custom pretty-printing for LRPLearners
-Base.show(io::IO, z::LRPLearner) = print(io, "Linear reward-penalty learner (LRPLearner) with ", z.n, " actions\n\nLearning rates for reward: ", z.a, "\nLearning rates for penalty: ", z.b, "\n\nAction costs: ", z.c, "\n\nCurrent action probability vector: ", z.W)
+Base.show(io::IO, z::LRPLearner) = print(io, "Linear reward-penalty learner (LRPLearner) with ", z.n, " actions\n\nLearning rates for reward: ", z.a, "\nLearning rates for penalty: ", z.b, "\n\nAction costs: ", z.c, "\n\nAdvantage matrix: ", z.A, "\n\nCurrent action probability vector: ", z.W)
 
 
 """
@@ -75,7 +78,7 @@ function LRPLearner(n::Int, W::Vector{Float64}, a::Vector{Float64}, b::Vector{Fl
         push!(P, (1 - b[i] - c[i]) * LinearAlgebra.I + ((b[i] + c[i])/(n - 1)) * (ones(n, n) - matrixunit(n, i)* ones(n, n)))
     end
 
-    return LRPLearner(n, a, b, c, W, R, P)
+    return LRPLearner(n, a, b, c, W, R, P, zeros(n, n))
 end
 
 
