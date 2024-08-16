@@ -19,7 +19,7 @@ end
 
 
 """
-    interact!(x::AbstractLearner, y::AbstractLearner)
+    interact!(x::AbstractLearner, y::AbstractLearner; symmetric = true)
 
 Make two learners `x` and `y` interact.
 
