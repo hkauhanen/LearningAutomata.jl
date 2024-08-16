@@ -6,7 +6,7 @@ Make a learner act.
 Draws an action according to the learner's current action probability vector.
 """
 function act(x::AbstractLearner)
-    StatsBase.sample(x.n, Weights(x.W))
+    StatsBase.sample(1:x.n, StatsBase.Weights(x.W))
 end
 
 
