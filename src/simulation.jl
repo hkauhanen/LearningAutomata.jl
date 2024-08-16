@@ -24,15 +24,3 @@ function simulate!(x::AbstractLearner, iter::Int, c::Vector{Float64})
     return transpose(history)
 end
 
-
-"""
-    interact!(x::AbstractLearner, y::AbstractLearner)
-
-Make two learners `x` and `y` interact.
-
-By design, interaction is asymmetric: `x` carries out an action, `y` observes
-this action and updates its state.
-"""
-function interact!(x::AbstractLearner, y::AbstractLearner)
-    #FIXME
-end
