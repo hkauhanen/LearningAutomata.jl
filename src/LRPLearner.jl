@@ -52,7 +52,7 @@ function Base.show(io::IO, z::LRPLearner)
             if !(i == 1 && j == 1)
                 print(io, "\t ")
             end
-            print(Crayon(foreground=:cyan), z.A[i,j])
+            print(io, Crayon(foreground=:cyan), z.A[i,j])
         end
     end
     print(io, Crayon(foreground=:default), "]\n")
