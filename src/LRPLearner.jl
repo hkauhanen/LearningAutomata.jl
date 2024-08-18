@@ -109,12 +109,18 @@ end
 
 Set the internal fields of an `LRPLearner` to those listed in dictionary `d`.
 
-This is a varargs function, where `p` is a list of pairs of arguments of the
-kind `field => value`. For example, to set the learning rate vector `a` of a 
-2-action learner to `[0.01, 0.02]` and the action cost vector `c` to 
-`[0.01, 0.01]`, call:
+This is a [varargs function](https://docs.julialang.org/en/v1/manual/functions/#Varargs-Functions), where `p` is a list of pairs of arguments of the
+kind `field => value`. 
 
-`reconfigure!(x, :a => [0.01, 0.02], :c => [0.01, 0.01])`
+# Examples
+
+The following sets the learning rate vector `a` of a 
+two-action `LRPLearner` to `[0.01, 0.02]` and the action cost vector `c` to 
+`[0.01, 0.01]`:
+
+```julia-repl
+reconfigure!(x, :a => [0.01, 0.02], :c => [0.01, 0.01])
+```
 """
 function reconfigure!(x::LRPLearner, p...)
     [setfield!(x, i[1], i[2]) for i in p]
