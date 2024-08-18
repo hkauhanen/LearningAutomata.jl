@@ -1,4 +1,12 @@
 """
+    get_probs(x::AbstractLearner)
+
+Return the current action probability vector.
+"""
+get_probs(x::AbstractLearner) = x.W
+
+
+"""
     reward!(x::AbstractLinearLearner, i::Int)
 
 Reward the `i`th action of an `AbstractLinearLearner`.

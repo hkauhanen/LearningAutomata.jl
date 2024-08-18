@@ -1,5 +1,6 @@
 module LearningAutomata
 
+using Crayons
 using LinearAlgebra
 using StatsBase
 
@@ -7,7 +8,7 @@ export AbstractLearner
 export AbstractLinearLearner
 export LRPLearner
 
-export act
+export get_probs
 export punish!
 export reward!
 export reconfigure!

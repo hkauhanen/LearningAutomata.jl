@@ -37,7 +37,28 @@ end
 
 # PRETTY-PRINTING
 
-Base.show(io::IO, z::LRPLearner) = print(io, "Linear reward-penalty learner (LRPLearner) with ", z.n, " actions\n\nLearning rates for reward: ", z.a, "\nLearning rates for penalty: ", z.b, "\n\nAction costs: ", z.c, "\n\nAdvantage matrix: ", z.A, "\n\nCurrent action probability vector: ", z.W)
+function Base.show(io::IO, ::MIME"text/plain", z::LRPLearner)
+    print(io, "Linear reward-penalty learner (LRPLearner) with ", Crayon(foreground=:cyan), z.n, Crayon(foreground=:default)," actions\n\n")
+    print(io, "Reward rates:  ", Crayon(foreground=:light_blue), z.a, Crayon(foreground=:default))
+    print(io, "\nPenalty rates: ", Crayon(foreground=:light_magenta), z.b, Crayon(foreground=:default))
+    print(io, "\n\nAction costs:  ", Crayon(foreground=:light_yellow), z.c, Crayon(foreground=:default))
+    print(io, "\n\nAdvantage matrix:\n")
+    print(io, "\n\t[")
+    for i in 1:size(z.A, 1)
+        if i > 1
+            print(io, "\n")
+        end
+        for j in 1:size(z.A, 2)
+            if !(i == 1 && j == 1)
+                print(io, "\t ")
+            end
+            print(Crayon(foreground=:cyan), z.A[i,j])
+        end
+    end
+    print(io, Crayon(foreground=:default), "]\n")
+    print(io, "\nCurrent action probabilities: ", Crayon(foreground=:green, bold=true), round.(z.W, digits=3), Crayon(foreground=:default, bold=false), "*")
+    print(io, "\n\n*) ", Crayon(italics=true), "Rounded. To get unrounded probability vector, call ", Crayon(foreground=:green), "get_probs(learner)")
+end
 
 
 # CONSTRUCTORS
