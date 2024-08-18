@@ -109,10 +109,9 @@ end
 
 Set the internal fields of an `LRPLearner` to those listed in dictionary `d`.
 
-This is a [varargs function](https://docs.julialang.org/en/v1/manual/functions/#Varargs-Functions), where `p` is a list of pairs of arguments of the
-kind `field => value`. 
+This is a [varargs function](https://docs.julialang.org/en/v1/manual/functions/#Varargs-Functions), where `p` is a list of `field => value` pairs.
 
-# Examples
+# Example
 
 The following sets the learning rate vector `a` of a 
 two-action `LRPLearner` to `[0.01, 0.02]` and the action cost vector `c` to 
