@@ -16,7 +16,7 @@ LRPLearner
 ```@docs
 reward!
 punish!
-revive_operators!
+reconfigure!
 interact!
 simulate!
 ```
