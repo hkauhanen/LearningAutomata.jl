@@ -1,3 +1,4 @@
-- need a function like "rejuvenate_operators" which will recompute R and P
-  based on the current values of a, b, and c (in case these have changed
-  for any reason)
+- add a 'reconfigure(x::LRPLearner, y::Dict)' function which will reset the
+  parameters for x listed in y
+- add an 'age' internal field for Learners which records number of times either
+  reward or punish has been called
