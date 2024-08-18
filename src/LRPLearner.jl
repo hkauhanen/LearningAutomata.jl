@@ -104,6 +104,25 @@ function revive_operators!(x::LRPLearner)
 end
 
 
+"""
+    reconfigure!(x::LRPLearner, p...)
+
+Set the internal fields of an `LRPLearner` to those listed in dictionary `d`.
+
+This is a varargs function, where `p` is a list of pairs of arguments of the
+kind `field => value`. For example, to set the learning rate vector `a` of a 
+2-action learner to `[0.01, 0.02]` and the action cost vector `c` to 
+`[0.01, 0.01]`, call:
+
+`reconfigure!(x, :a => [0.01, 0.02], :c => [0.01, 0.01])`
+"""
+function reconfigure!(x::LRPLearner, p...)
+    [setfield!(x, i[1], i[2]) for i in p]
+    revive_operators!(x)
+    show(x)
+end
+
+
 #=
 
 """

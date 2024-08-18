@@ -10,6 +10,7 @@ export LRPLearner
 export act
 export punish!
 export reward!
+export reconfigure!
 export revive_operators!
 export interact!
 export simulate!
