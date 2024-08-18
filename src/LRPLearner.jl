@@ -37,7 +37,7 @@ end
 
 # PRETTY-PRINTING
 
-function Base.show(io::IO, ::MIME"text/plain", z::LRPLearner)
+function Base.show(io::IO, z::LRPLearner)
     print(io, "Linear reward-penalty learner (LRPLearner) with ", Crayon(foreground=:cyan), z.n, Crayon(foreground=:default)," actions\n\n")
     print(io, "Reward rates:  ", Crayon(foreground=:light_blue), z.a, Crayon(foreground=:default))
     print(io, "\nPenalty rates: ", Crayon(foreground=:light_magenta), z.b, Crayon(foreground=:default))
@@ -57,7 +57,7 @@ function Base.show(io::IO, ::MIME"text/plain", z::LRPLearner)
     end
     print(io, Crayon(foreground=:default), "]\n")
     print(io, "\nCurrent action probabilities: ", Crayon(foreground=:green, bold=true), round.(z.W, digits=3), Crayon(foreground=:default, bold=false), "*")
-    print(io, "\n\n*) ", Crayon(italics=true), "Rounded. To get unrounded probability vector, call ", Crayon(foreground=:green), "get_probs(learner)")
+    print(io, "\n\n*) ", Crayon(italics=true), "Rounded. To obtain exact probability vector, call ", Crayon(foreground=:green), "get_probs(learner)")
 end
 
 
@@ -80,7 +80,7 @@ function LRPLearner(n::Int,
            W::Vector{Float64} = ones(n) ./ n,
            A::Matrix{Float64} = zeros(n ,n))
     R = Vector{Matrix{Float64}}(undef, n)
-    learner = LRPLearner(n, a, b, c, W, A, R, R)
+    learner = LRPLearner(n, a, b, c, W, A, R, copy(R))
     revive_operators!(learner)
     return learner
 end
@@ -103,7 +103,7 @@ function LRPLearner(n::Int,
            W::Vector{Float64} = ones(n) ./ n,
            A::Matrix{Float64} = zeros(n ,n))
     R = Vector{Matrix{Float64}}(undef, n)
-    learner = LRPLearner(n, a .* ones(n), b, c, W, A, R, R)
+    learner = LRPLearner(n, a .* ones(n), b, c, W, A, R, copy(R))
     revive_operators!(learner)
     return learner
 end
