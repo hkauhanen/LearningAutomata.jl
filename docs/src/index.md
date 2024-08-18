@@ -9,7 +9,6 @@ LRPLearner
 ## Constructors
 
 ```@docs
-LRPLearner(dim::Int, gamma::Float64)
 ```
 
 ## Functions
@@ -17,6 +16,7 @@ LRPLearner(dim::Int, gamma::Float64)
 ```@docs
 reward!
 punish!
+revive_operators!
 interact!
 simulate!
 ```
