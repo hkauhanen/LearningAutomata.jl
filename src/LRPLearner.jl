@@ -20,6 +20,8 @@ advantage matrix `A`.
 # References
 
 Bush and Mosteller FIXME
+Kauhanen FIXME
+Narendra and Thathachar FIXME
 """
 mutable struct LRPLearner <: AbstractLinearLearner
     n::Int
