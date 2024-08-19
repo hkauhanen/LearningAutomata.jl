@@ -61,6 +61,7 @@ function Base.show(io::IO, z::LRPLearner)
 end
 
 
+
 # CONSTRUCTORS
 
 """
@@ -111,43 +112,11 @@ end
 
 # UTILITY FUNCTIONS
 
-"""
-    revive_operators!(x::LRPLearner)
-
-Recompute the reward and penalty operators of an `LRPLearner`.
-
-Call this if you change any of the following internal fields of an `LRPLearner`:
-`a`, `b`, `c`.
-"""
 function revive_operators!(x::LRPLearner)
     for i in 1:x.n
         x.R[i] = (1 - x.a[i] - x.c[i]) * LinearAlgebra.I + x.a[i] * matrixunit(x.n, i) * ones(x.n, x.n) + (x.c[i]/(x.n - 1)) * (ones(x.n, x.n) - matrixunit(x.n, i) * ones(x.n, x.n))
         x.P[i] = (1 - x.b[i] - x.c[i]) * LinearAlgebra.I + ((x.b[i] + x.c[i])/(x.n - 1)) * (ones(x.n, x.n) - matrixunit(x.n, i)* ones(x.n, x.n))
     end
-end
-
-
-"""
-    reconfigure!(x::LRPLearner, p...)
-
-Set the internal fields of an `LRPLearner` to those listed in dictionary `d`.
-
-This is a [varargs function](https://docs.julialang.org/en/v1/manual/functions/#Varargs-Functions), where `p` is a list of `field => value` pairs.
-
-# Example
-
-The following sets the learning rate vector `a` of a 
-two-action `LRPLearner` to `[0.01, 0.02]` and the action cost vector `c` to 
-`[0.01, 0.01]`:
-
-```julia-repl
-reconfigure!(x, :a => [0.01, 0.02], :c => [0.01, 0.01])
-```
-"""
-function reconfigure!(x::LRPLearner, p...)
-    [setfield!(x, i[1], i[2]) for i in p]
-    revive_operators!(x)
-    show(x)
 end
 
 
