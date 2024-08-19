@@ -60,7 +60,6 @@ end
 # TRIGGER revive_operators! ON REASSIGNMENT OF INTERNAL FIELDS
 function Base.setproperty!(x::AbstractLinearLearner, s::Symbol, f)
     if s === :W
-        @warn "Setting a learner's action probability vector. You should probably not be doing this..."
         setfield!(x, s, f)
     else
         setfield!(x, s, f)
