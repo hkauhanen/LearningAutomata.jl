@@ -64,7 +64,7 @@ function Base.setproperty!(x::AbstractLinearLearner, s::Symbol, f)
     else
         setfield!(x, s, f)
         revive_operators!(x)
-        show(x)
+        #show(x)
     end
 end
 
