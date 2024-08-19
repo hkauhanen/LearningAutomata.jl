@@ -17,7 +17,6 @@ LRPLearner
 get_probs
 reward!
 punish!
-reconfigure!
 interact!
 simulate!
 ```
