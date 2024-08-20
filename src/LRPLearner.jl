@@ -57,7 +57,7 @@ function Base.show(io::IO, z::LRPLearner)
     end
     print(io, Crayon(foreground=:default), "]\n")
     print(io, "\nCurrent action probabilities: ", Crayon(foreground=:green, bold=true), round.(z.W, digits=3), Crayon(foreground=:default, bold=false), "*")
-    print(io, "\n\n*) ", Crayon(italics=true), "Rounded. To obtain exact probability vector, call ", Crayon(foreground=:green), "get_probs(learner)")
+    print(io, "\n\n*) ", Crayon(italics=true), "Rounded. To obtain exact probability vector, call ", Crayon(foreground=:green), "get_probs(learner)", Crayon(foreground=:default), " or ", Crayon(foreground=:green), "learner.W")
 end
 
 
