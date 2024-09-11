@@ -6,3 +6,7 @@ makedocs(sitename = "LearningAutomata.jl",
                   "Guide" => "guide.md",
                   "API" => "api.md"
                  ])
+
+deploydocs(
+           repo = "github.com/hkauhanen/LearningAutomata.jl.git"
+          )
