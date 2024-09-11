@@ -39,7 +39,6 @@ simulate!(alice, 1000, sre) |> plot
 savefig("simulation.svg"); nothing # hide
 ```
 
-![](simulation.svg)
 
 
 ## Reconfiguring learners
