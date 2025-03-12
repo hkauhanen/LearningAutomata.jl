@@ -1,8 +1,10 @@
 module LearningAutomata
 
+using Agents
 using Crayons
 using LinearAlgebra
 using StatsBase
+using TernaryPlots
 
 export AbstractLearner
 export AbstractLinearLearner
