@@ -1,6 +1,8 @@
-abstract type AbstractLearner end
+abstract type AbstractLearner <: Agents.AbstractAgent end
 
 abstract type AbstractLinearLearner <: AbstractLearner end
+
+abstract type AbstractLRPLearner <: AbstractLinearLearner end
 
 
 """

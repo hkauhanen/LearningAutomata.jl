@@ -1,7 +1,7 @@
 name = "LearningAutomata"
 uuid = "e3ef4b07-774d-4aef-af6b-c65484cd10e4"
 authors = ["Henri Kauhanen"]
-version = "0.1.0-DEV"
+version = "0.1.1-DEV"
 
 [deps]
 Agents = "46ada45e-f475-11e8-01d0-f70cc89e6671"

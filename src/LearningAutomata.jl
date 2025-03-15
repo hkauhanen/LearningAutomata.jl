@@ -8,6 +8,7 @@ using TernaryPlots
 
 export AbstractLearner
 export AbstractLinearLearner
+export AbstractLRPLearner
 export LRPLearner
 
 export get_probs

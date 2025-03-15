@@ -10,13 +10,12 @@ length (number of simulation iterations) and ``n`` is the learner's dimensionali
 the learning trajectory.
 """
 function simulate!(x::AbstractLearner, iter::Int, c::Vector{Float64})
-    inputs = StatsBase.sample(1:x.n, Weights(c), iter)
     history = zeros(x.n, iter)
 
     for t in 1:iter
         g = StatsBase.sample(1:x.n, Weights(x.W))
 
-        g == inputs[t] ? punish!(x, g) : reward!(x, g)
+        rand() < c[g] ? punish!(x, g) : reward!(x, g)
 
         history[:, t] = x.W
     end

@@ -23,7 +23,7 @@ Bush and Mosteller FIXME
 Kauhanen FIXME
 Narendra and Thathachar FIXME
 """
-mutable struct LRPLearner <: AbstractLinearLearner
+mutable struct LRPLearner <: AbstractLRPLearner
     n::Int
     a::Vector{Float64}
     b::Vector{Float64}
@@ -37,7 +37,7 @@ end
 
 # PRETTY-PRINTING
 
-function Base.show(io::IO, z::LRPLearner)
+function Base.show(io::IO, z::AbstractLRPLearner)
     print(io, "Linear reward-penalty learner (LRPLearner) with ", Crayon(foreground=:cyan), z.n, Crayon(foreground=:default)," actions\n\n")
     print(io, "Reward rates:  ", Crayon(foreground=:light_blue), z.a, Crayon(foreground=:default))
     print(io, "\nPenalty rates: ", Crayon(foreground=:light_magenta), z.b, Crayon(foreground=:default))
@@ -79,7 +79,7 @@ function LRPLearner(n::Int,
            b::Vector{Float64} = a,
            c::Vector{Float64} = zeros(n),
            W::Vector{Float64} = ones(n) ./ n,
-           A::Matrix{Float64} = zeros(n ,n))
+           A::Matrix{Float64} = zeros(n, n))
     R = Vector{Matrix{Float64}}(undef, n)
     learner = LRPLearner(n, a, b, c, W, A, R, copy(R))
     revive_operators!(learner)
@@ -102,7 +102,7 @@ function LRPLearner(n::Int,
            b::Vector{Float64} = a .* ones(n),
            c::Vector{Float64} = zeros(n),
            W::Vector{Float64} = ones(n) ./ n,
-           A::Matrix{Float64} = zeros(n ,n))
+           A::Matrix{Float64} = zeros(n, n))
     R = Vector{Matrix{Float64}}(undef, n)
     learner = LRPLearner(n, a .* ones(n), b, c, W, A, R, copy(R))
     revive_operators!(learner)
@@ -112,7 +112,7 @@ end
 
 # UTILITY FUNCTIONS
 
-function revive_operators!(x::LRPLearner)
+function revive_operators!(x::AbstractLRPLearner)
     for i in 1:x.n
         x.R[i] = (1 - x.a[i] - x.c[i]) * LinearAlgebra.I + x.a[i] * matrixunit(x.n, i) * ones(x.n, x.n) + (x.c[i]/(x.n - 1)) * (ones(x.n, x.n) - matrixunit(x.n, i) * ones(x.n, x.n))
         x.P[i] = (1 - x.b[i] - x.c[i]) * LinearAlgebra.I + ((x.b[i] + x.c[i])/(x.n - 1)) * (ones(x.n, x.n) - matrixunit(x.n, i)* ones(x.n, x.n))
