@@ -183,7 +183,7 @@ Undergo an interaction between a learner and a stationary random environment.
 """
 function interact!(x::AbstractLearner, y::AbstractSRE)
     a = act(x)
-    #punishes(y, a) ? punish!(x, a) : reward!(x, a)
+    punishes(y, a) ? punish!(x, a) : reward!(x, a)
     #=
     if a == 1
         punishes(y, 1) ? punish!(x, 1) : reward!(x, 1)
@@ -191,11 +191,13 @@ function interact!(x::AbstractLearner, y::AbstractSRE)
         punishes(y, 2) ? reward!(x, 1) : punish!(x, 1)
     end
     =#
+    #=
     if a == 1
         punishes(y, 1) ? reward!(x, 2) : punish!(x, 2)
     elseif a == 2
         punishes(y, 2) ? punish!(x, 2) : reward!(x, 2)
     end
+    =#
 end
 
 

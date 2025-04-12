@@ -1,7 +1,7 @@
 name = "LearningAutomata"
 uuid = "e3ef4b07-774d-4aef-af6b-c65484cd10e4"
 authors = ["Henri Kauhanen"]
-version = "0.1.2-DEV"
+version = "0.1.3-DEV"
 
 [deps]
 Crayons = "a8cc5b0e-0ffa-5ad4-8c14-923d3ee1735f"
