@@ -1,30 +1,31 @@
 # TYPE
 
 """
-    LRPLearner(n::Int,
+    LRILearner(n::Int,
                γ::Vector{Float64},
-               β::Vector{Float64}, 
                δ::Vector{Float64},
                W::Vector{Float64},
                A::Matrix{Float64},
                R::Vector{Matrix{Float64}}, 
-               P::Vector{Matrix{Float64}}) <: AbstractLRPLearner
+               P::Vector{Matrix{Float64}}) <: AbstractLRILearner
 
-A linear reward--penalty (LRP) learner.
+A linear reward--inaction (LRI) learner.
 
-A general linear reward-penalty learner with `n` actions, learning rates `γ`
-for rewards, learning rates `β` for punishments, action costs `δ`, initial
+A general linear reward--inaction learner with `n` actions, learning rates `γ`
+for rewards, action costs `δ`, initial
 action probability vector `W`, advantage matrix `A`, and vectors of reward 
 and penalty operators `R` and `P`.
+
+An LRI learner is like an LRP learner except it does nothing upon receiving
+a punishment (inaction).
 
 The end user normally need not worry about the `R` and `P` fields; these are
 used internally by LearningAutomata.jl to implement the reward and penalty
 functions and are automatically calculated from the other parameters.
 """
-mutable struct LRPLearner <: AbstractLRPLearner
+mutable struct LRILearner <: AbstractLRILearner
     n::Int
     γ::Vector{Float64}
-    β::Vector{Float64}
     δ::Vector{Float64}
     W::Vector{Float64}
     A::Matrix{Float64}
@@ -35,10 +36,9 @@ end
 
 # PRETTY-PRINTING
 
-function Base.show(io::IO, z::AbstractLRPLearner)
-    print(io, "Linear reward-penalty learner (LRPLearner) with ", Crayon(foreground=:cyan), z.n, Crayon(foreground=:default)," actions\n\n")
+function Base.show(io::IO, z::AbstractLRILearner)
+    print(io, "Linear reward-inaction learner (LRILearner) with ", Crayon(foreground=:cyan), z.n, Crayon(foreground=:default)," actions\n\n")
     print(io, "Reward rates:  ", Crayon(foreground=:light_blue), z.γ, Crayon(foreground=:default))
-    print(io, "\nPenalty rates: ", Crayon(foreground=:light_magenta), z.β, Crayon(foreground=:default))
     print(io, "\n\nAction costs:  ", Crayon(foreground=:light_yellow), z.δ, Crayon(foreground=:default))
     print(io, "\n\nAdvantage matrix:\n")
     print(io, "\n\t[")
@@ -63,46 +63,42 @@ end
 # CONSTRUCTORS
 
 """
-    LRPLearner(n::Int,
+    LRILearner(n::Int,
                γ::Vector{Float64};
-               β::Vector{Float64} = γ,
                δ::Vector{Float64} = zeros(n),
                W::Vector{Float64} = ones(n) ./ n,
                A::Matrix{Float64} = zeros(n, n))
 
-Create an `LRPLearner` with `n` actions and learning rate vector `γ`.
+Create an `LRILearner` with `n` actions and learning rate vector `γ`.
 """
-function LRPLearner(n::Int,
+function LRILearner(n::Int,
            γ::Vector{Float64};
-           β::Vector{Float64} = γ,
            δ::Vector{Float64} = zeros(n),
            W::Vector{Float64} = ones(n) ./ n,
            A::Matrix{Float64} = zeros(n, n))
     R = Vector{Matrix{Float64}}(undef, n)
-    learner = LRPLearner(n, γ, β, δ, W, A, R, copy(R))
+    learner = LRILearner(n, γ, δ, W, A, R, copy(R))
     revive_operators!(learner)
     return learner
 end
 
 
 """
-    LRPLearner(n::Int,
+    LRILearner(n::Int,
                γ::Float64;
-               β::Vector{Float64} = γ .* ones(n),
                δ::Vector{Float64} = zeros(n),
                W::Vector{Float64} = ones(n) ./ n,
                A::Matrix{Float64} = zeros(n, n))
 
-Create an `LRPLearner` with `n` actions and learning rate `γ`.
+Create an `LRILearner` with `n` actions and learning rate `γ`.
 """
-function LRPLearner(n::Int,
+function LRILearner(n::Int,
            γ::Float64;
-           β::Vector{Float64} = γ .* ones(n),
            δ::Vector{Float64} = zeros(n),
            W::Vector{Float64} = ones(n) ./ n,
            A::Matrix{Float64} = zeros(n, n))
     R = Vector{Matrix{Float64}}(undef, n)
-    learner = LRPLearner(n, γ .* ones(n), β, δ, W, A, R, copy(R))
+    learner = LRILearner(n, γ .* ones(n), δ, W, A, R, copy(R))
     revive_operators!(learner)
     return learner
 end
@@ -110,39 +106,10 @@ end
 
 # UTILITY FUNCTIONS
 
-function revive_operators!(x::AbstractLRPLearner)
-    for i in 1:x.n
-        mat = zeros(x.n, x.n)
-        mat[diagind(mat)] .= 1 - x.γ[i]
-        mat[i,:] = fill(x.γ[i], x.n)
-        mat[:,i] = fill(x.δ[i]/(x.n - 1), x.n)
-        mat[i,i] = 1 - x.δ[i]
-        x.R[i] = mat
-
-        mat = fill(x.β[i]/(x.n - 1), x.n, x.n)
-        mat[diagind(mat)] .= 1 - x.β[i] + x.β[i]/(x.n - 1)
-        mat[i,:] = zeros(x.n)
-        mat[:,i] .= x.β[i]/(x.n - 1) .+ x.δ[i]/(x.n - 1)
-        mat[i,i] = 1 - x.β[i] - x.δ[i]
-        x.P[i] = mat
-    end
-end
-
-
-# faulty
-function revive_operators_BAK2!(x::AbstractLRPLearner)
+function revive_operators!(x::AbstractLRILearner)
     for i in 1:x.n
         x.R[i] = (1 - x.γ[i] - x.δ[i]) * LinearAlgebra.I(x.n) + x.γ[i] * matrixunit(x.n, i) * ones(x.n, x.n) + (x.δ[i]/(x.n - 1)) * (ones(x.n, x.n) - matrixunit(x.n, i) * ones(x.n, x.n))
-        x.P[i] = (1 - x.β[i] - x.δ[i]) * LinearAlgebra.I(x.n) + ((x.β[i] + x.δ[i])/(x.n - 1)) * (ones(x.n, x.n) - matrixunit(x.n, i)* ones(x.n, x.n))
-    end
-end
-
-
-
-function revive_operators_BAK!(x::AbstractLRPLearner)
-    for i in 1:x.n
-        x.R[i] = (1 - x.a[i] - x.c[i]) * LinearAlgebra.I + x.a[i] * matrixunit(x.n, i) * ones(x.n, x.n) + (x.c[i]/(x.n - 1)) * (ones(x.n, x.n) - matrixunit(x.n, i) * ones(x.n, x.n))
-        x.P[i] = (1 - x.b[i] - x.c[i]) * LinearAlgebra.I + ((x.b[i] + x.c[i])/(x.n - 1)) * (ones(x.n, x.n) - matrixunit(x.n, i)* ones(x.n, x.n))
+        x.P[i] = LinearAlgebra.I(x.n)
     end
 end
 

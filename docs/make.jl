@@ -1,3 +1,6 @@
+push!(LOAD_PATH,"../src/")
+
+
 using Documenter, DocumenterCitations, LearningAutomata
 
 bib = CitationBibliography(
@@ -8,15 +11,20 @@ bib = CitationBibliography(
 makedocs(sitename = "LearningAutomata.jl",
          pages = [
                   "Home" => "index.md",
+                  "Quickstart" => "quickstart.md",
                   "Theory" => "theory.md",
                   "Guide" => [
                               "Learning in simple environments" => "simple.md",
-                              "Agents.jl integration" => "agents.md"
+                              "Agents.jl integration" => "agents.md",
+                              "Working with mean dynamics" => "meandynamics.md",
+                              "Advanced visualization" => "advis.md"
                              ],
+                  "Developer notes" => "developing.md",
                   "API" => "api.md",
                   "References" => "references.md"
                  ],
-         plugins = [bib])
+         plugins = [bib],
+         remotes = nothing)
 
 #deploydocs(
 #           repo = "github.com/hkauhanen/LearningAutomata.jl.git"

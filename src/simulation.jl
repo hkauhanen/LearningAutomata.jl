@@ -1,25 +1,36 @@
 """
-    simulate!(x::AbstractLearner, iter::Int, c::Vector{Float64})
+    simulate!(x::AbstractLearner, y::AbstractSRE, n::Int;
+              collect_history = true)
 
-Simulate a learner for `iter` iterations in a stationary random environment
+Simulate a learner for `n` iterations in a stationary random environment
 constituted by penalty probability vector `c`.
 
-Returns the trajectory as a ``m \\times n`` matrix, where ``m`` is the trajectory
-length (number of simulation iterations) and ``n`` is the learner's dimensionality
+If `collect_history = true`, 
+returns the trajectory as a ``m \\times k`` matrix, where ``m`` is the trajectory
+length (number of simulation iterations) and ``k`` is the learner's dimensionality
 (number of actions). This can be redirected e.g. to `plot` in order to visualize
 the learning trajectory.
+
+If `collect_history = false`, only the final state is returned.
 """
-function simulate!(x::AbstractLearner, iter::Int, c::Vector{Float64})
-    history = zeros(x.n, iter)
+function simulate!(x::AbstractLearner, y::AbstractSRE, n::Int;
+                   collect_history = true)
+    history = zeros(x.n, n)
 
-    for t in 1:iter
-        g = StatsBase.sample(1:x.n, Weights(x.W))
+    for t in 1:n
+        g = act(x)
 
-        rand() < c[g] ? punish!(x, g) : reward!(x, g)
+        is_punished(y, g) ? punish!(x, g) : reward!(x, g)
 
-        history[:, t] = x.W
+        if collect_history
+          history[:, t] = x.W
+        end
     end
 
-    return transpose(history)
+    if collect_history
+      return transpose(history)
+    else
+      return x.W
+    end
 end
 

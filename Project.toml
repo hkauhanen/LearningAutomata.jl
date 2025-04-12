@@ -1,12 +1,13 @@
 name = "LearningAutomata"
 uuid = "e3ef4b07-774d-4aef-af6b-c65484cd10e4"
 authors = ["Henri Kauhanen"]
-version = "0.1.1-DEV"
+version = "0.1.2-DEV"
 
 [deps]
-Agents = "46ada45e-f475-11e8-01d0-f70cc89e6671"
 Crayons = "a8cc5b0e-0ffa-5ad4-8c14-923d3ee1735f"
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+SimplexPlots = "01b033bf-579e-43e2-b889-98e6248b379a"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 TernaryPlots = "1f5e811d-5acb-4dfc-9a45-b3a27d369aae"
 
